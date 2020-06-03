@@ -1,0 +1,12 @@
+name: KixstarWorldSigns
+version: 1.0.0-SNAPSHOT
+main: codes.theotter.kixstar.KixstarWorldSigns
+author: CodingSeaOtter
+api-version: 1.13
+depend: [Multiverse-Core]
+commands:
+  kixstarworlds:
+    aliases: [kw]
+    description: 'Add or remove players from sign permissions'
+    usage: 'kw [add/remove] <player> <sign_name>'
+    permission: 'kixstarworlds.command'
