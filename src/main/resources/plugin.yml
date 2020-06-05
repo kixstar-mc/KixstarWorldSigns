@@ -10,3 +10,14 @@ commands:
     description: 'Add or remove players from sign permissions'
     usage: 'kw [add/remove] <player> <sign_name>'
     permission: 'kixstarworlds.command'
+permissions:
+  kixstarworlds.use.sign:
+    default: true
+    description: Allows using teleportation signs
+  kixstarworlds.command:
+    default: op
+    description: Allows adding or removing players from sign permissions
+  kixstarworlds.world.*:
+    default: op
+    description: Allows using any sign regardless of config
+    children: []

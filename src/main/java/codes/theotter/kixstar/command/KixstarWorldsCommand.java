@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -42,6 +43,14 @@ public class KixstarWorldsCommand extends KixstarCommand implements CommandExecu
 
         } else {
             return false;
+        }
+
+        if (Bukkit.getPluginManager().getPermission(String.format("kixstarworlds.world.%s", sign_name)) == null) {
+            Permission parentPermission = Bukkit.getPluginManager().getPermission("kixstarworlds.world.*");
+            Permission permission = new Permission(String.format("kixstarworlds.world.%s", sign_name));
+            Bukkit.getPluginManager().addPermission(permission);
+            permission.addParent(parentPermission, true);
+            sender.getServer().getLogger().fine(String.format("Registered world %s.", sign_name));
         }
 
         KixstarWorldSigns.getInstance().getConfig().set(config_path, permitted_players);

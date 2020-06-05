@@ -5,6 +5,7 @@ import codes.theotter.kixstar.listener.BlockListener;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,6 +31,13 @@ public class KixstarWorldSigns extends JavaPlugin {
         this.multiverse_core = (MultiverseCore) multiverse_plugin;
         this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
         this.getConfig().getList("", new ArrayList<String>());
+        final Permission parentPermission = Bukkit.getPluginManager().getPermission("kixstarworlds.world.*");
+        this.getConfig().getConfigurationSection("restricted_signs").getKeys(false).forEach(key -> {
+            final Permission permission = new Permission(String.format("kixstarworlds.world.%s", key));
+            Bukkit.getPluginManager().addPermission(permission);
+            permission.addParent(parentPermission, true);
+            this.getLogger().fine(String.format("Registered world %s.", key));
+        });
         this.getCommand("kixstarworlds").setExecutor(new KixstarWorldsCommand());
     }
 
