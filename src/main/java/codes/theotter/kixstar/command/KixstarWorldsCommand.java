@@ -51,10 +51,14 @@ public class KixstarWorldsCommand extends KixstarCommand implements CommandExecu
 
         if (Bukkit.getPluginManager().getPermission(String.format("kixstarworlds.world.%s", sign_name)) == null) {
             Permission parentPermission = Bukkit.getPluginManager().getPermission("kixstarworlds.world.*");
-            Permission permission = new Permission(String.format("kixstarworlds.world.%s", sign_name));
-            Bukkit.getPluginManager().addPermission(permission);
-            permission.addParent(parentPermission, true);
-            sender.getServer().getLogger().fine(String.format("Registered world %s.", sign_name));
+            if (parentPermission == null) {
+                sender.getServer().getLogger().fine("Cannot find kixstarworlds.world.*. Please contact the plugin developer.");
+            } else {
+                Permission permission = new Permission(String.format("kixstarworlds.world.%s", sign_name));
+                Bukkit.getPluginManager().addPermission(permission);
+                permission.addParent(parentPermission, true);
+                sender.getServer().getLogger().fine(String.format("Registered world %s.", sign_name));
+            }
         }
 
         KixstarWorldSigns.getInstance().getConfig().set(config_path, permitted_players);
