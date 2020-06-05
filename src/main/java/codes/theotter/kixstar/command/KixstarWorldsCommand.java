@@ -5,12 +5,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class KixstarWorldsCommand extends KixstarCommand implements CommandExecutor {
 
@@ -29,23 +28,22 @@ public class KixstarWorldsCommand extends KixstarCommand implements CommandExecu
             return false;
         }
 
-        Player player = Bukkit.getPlayer(args[1]);
-
-        if(player == null) {
-            this.sendMessage(sender, "&4Can't find " + args[1] + ". Are they online?");
+        UUID playerId = Bukkit.getPlayerUniqueId(args[1]);
+        if (playerId == null) {
+            this.sendMessage(sender, "&4Can't find " + args[1] + ". Do they exist?");
             return true;
         }
 
         String sign_name = args[2].trim();
         String config_path = "restricted_signs." + sign_name;
-        List<String> permitted_players = (ArrayList<String>) KixstarWorldSigns.getInstance().getConfig().getList(config_path, new ArrayList<String>());
+        List<String> permitted_players = KixstarWorldSigns.getInstance().getConfig().getStringList(config_path);
 
         if (sub_command.equalsIgnoreCase("add")) {
-            permitted_players.add(player.getUniqueId().toString());
-            this.sendMessage(sender, "&aAdded " + player.getName() + " to sign: " + sign_name);
+            permitted_players.add(playerId.toString());
+            this.sendMessage(sender, String.format("&aAdded %s to sign: %s", args[1], sign_name));
         } else if (sub_command.equalsIgnoreCase("remove")) {
-            permitted_players.remove(player.getUniqueId().toString());
-            this.sendMessage(sender, "&aRemoved " + player.getName() + " to sign: " + sign_name);
+            permitted_players.remove(playerId.toString());
+            this.sendMessage(sender, String.format("&aRemoved %s to sign: %s", args[1], sign_name));
 
         } else {
             return false;
