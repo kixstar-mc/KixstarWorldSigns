@@ -32,6 +32,12 @@ public class KixstarWorldsCommand extends KixstarCommand implements CommandExecu
             Player player = Bukkit.getPlayer(args[1]);
             String sign_name = args[2].trim();
             String config_path = "restricted_signs." + sign_name;
+
+            if(player == null) {
+                this.sendMessage(sender, "&4Can't find " + args[1] + ". Are they online?");
+                return true;
+            }
+
             List<String> permitted_players = (ArrayList<String>) KixstarWorldSigns.getInstance().getConfig().getList(config_path, new ArrayList<String>());
             permitted_players.add(player.getUniqueId().toString());
             KixstarWorldSigns.getInstance().getConfig().set(config_path, permitted_players);
