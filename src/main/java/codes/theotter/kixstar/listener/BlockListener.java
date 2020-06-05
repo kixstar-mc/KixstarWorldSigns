@@ -56,7 +56,7 @@ public class BlockListener implements Listener {
         }
 
         SafeTTeleporter teleporter = KixstarWorldSigns.getInstance().getMultiverseCore().getSafeTTeleporter();
-        MVDestination destination = KixstarWorldSigns.getInstance().getMultiverseCore().getDestFactory().getDestination(sign_block.getLine(1).trim());
+        MVDestination destination = KixstarWorldSigns.getInstance().getMultiverseCore().getDestFactory().getDestination("w:" + sign_block.getLine(2).trim());
         teleporter.safelyTeleport(Bukkit.getConsoleSender(), event.getPlayer(), destination);
 
     }
