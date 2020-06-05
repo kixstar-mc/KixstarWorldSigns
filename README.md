@@ -31,5 +31,5 @@ All commands are prefixed with `kixstarworlds/kw`
 
 |  Node | Description  |
 |:-:|:-:|
-| kixstarworlds.all  |  Gives you access to all signs  |
+| kixstarworlds.world.*  |  Gives you access to all signs  |
 |  kixstarworlds.command | Gives you access to running the command to add/remove players from signs. |
