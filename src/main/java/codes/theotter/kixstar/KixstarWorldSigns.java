@@ -41,7 +41,7 @@ public class KixstarWorldSigns extends JavaPlugin {
         return (KixstarWorldSigns) Bukkit.getServer().getPluginManager().getPlugin("KixstarWorldSigns");
     }
 
-    public MultiverseCore getMultiverCore() {
+    public MultiverseCore getMultiverseCore() {
         return this.multiverse_core;
     }
 }

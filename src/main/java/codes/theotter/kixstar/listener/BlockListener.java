@@ -3,7 +3,6 @@ package codes.theotter.kixstar.listener;
 import codes.theotter.kixstar.KixstarWorldSigns;
 import com.onarandombox.MultiverseCore.api.MVDestination;
 import com.onarandombox.MultiverseCore.api.SafeTTeleporter;
-import com.onarandombox.MultiverseCore.enums.TeleportResult;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -55,8 +54,8 @@ public class BlockListener implements Listener {
             return;
         }
 
-        SafeTTeleporter teleporter = KixstarWorldSigns.getInstance().getMultiverCore().getSafeTTeleporter();
-        MVDestination destination = KixstarWorldSigns.getInstance().getMultiverCore().getDestFactory().getDestination(sign_block.getLine(1).trim());
+        SafeTTeleporter teleporter = KixstarWorldSigns.getInstance().getMultiverseCore().getSafeTTeleporter();
+        MVDestination destination = KixstarWorldSigns.getInstance().getMultiverseCore().getDestFactory().getDestination(sign_block.getLine(1).trim());
         teleporter.safelyTeleport(Bukkit.getConsoleSender(), event.getPlayer(), destination);
     }
 
