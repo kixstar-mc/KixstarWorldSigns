@@ -13,10 +13,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BlockListener implements Listener {
-    private final Material[] sign_materials = new Material[]{
+    private final List<Material> signMaterials = Arrays.asList(
             Material.SPRUCE_SIGN,
             Material.SPRUCE_WALL_SIGN,
             Material.ACACIA_SIGN,
@@ -29,7 +30,7 @@ public class BlockListener implements Listener {
             Material.JUNGLE_WALL_SIGN,
             Material.OAK_SIGN,
             Material.OAK_WALL_SIGN
-    };
+    );
 
     @EventHandler
     public void onBlockInteraction(PlayerInteractEvent event) {
@@ -49,7 +50,7 @@ public class BlockListener implements Listener {
 
         event.setCancelled(true);
 
-        if (!doPlayerHavePermissionToUseSign(sign_block, event.getPlayer()) && event.getPlayer().hasPermission("kixstarworlds.all")) {
+        if (!canUseSign(sign_block, event.getPlayer())) {
             event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&4You don't have permission to use this sign."));
             return;
         }
@@ -57,28 +58,30 @@ public class BlockListener implements Listener {
         SafeTTeleporter teleporter = KixstarWorldSigns.getInstance().getMultiverseCore().getSafeTTeleporter();
         MVDestination destination = KixstarWorldSigns.getInstance().getMultiverseCore().getDestFactory().getDestination(sign_block.getLine(1).trim());
         teleporter.safelyTeleport(Bukkit.getConsoleSender(), event.getPlayer(), destination);
+
     }
 
-    public boolean doPlayerHavePermissionToUseSign(Sign sign, Player player) {
-        if (sign.getLine(2).trim().equalsIgnoreCase("")) {
+    private boolean canUseSign(Sign sign, Player player) {
+        String worldName = sign.getLine(2).trim();
+        if (worldName.equals("")) {
+            return false; // ? this should be false, there is no world set
+        }
+
+        // override permission for specific world, works with * since parent is added correctly
+        if (player.hasPermission(String.format("kixstarworlds.world.%s", worldName))) {
             return true;
         }
 
-        String configuration_path = "restricted_signs." + sign.getLine(2).trim();
-        ArrayList<String> allowed_player_uuids = (ArrayList<String>) KixstarWorldSigns.getInstance().getConfig().getList(configuration_path, new ArrayList<String>());
+        // path in config file
+        List<String> allowedPlayerUUIDs = KixstarWorldSigns.getInstance()
+                .getConfig()
+                .getStringList(String.format("restricted_signs.%s", worldName));
 
-        return allowed_player_uuids.contains(player.getUniqueId().toString());
+        return allowedPlayerUUIDs.contains(player.getUniqueId().toString());
+
     }
 
     public boolean isSignMaterial(Material material) {
-        for (int index = 0; index < sign_materials.length; index++) {
-            Material material_at_index = sign_materials[index];
-
-            if (material_at_index == material) {
-                return true;
-            }
-        }
-
-        return false;
+        return this.signMaterials.contains(material);
     }
 }
